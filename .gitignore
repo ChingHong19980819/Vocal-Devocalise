@@ -1,0 +1,11 @@
+*.pyc
+*.swp
+.vscode/
+__pycache__/
+songs/
+qrcode.png
+.DS_Store
+dist
+build
+node_modules
+electron

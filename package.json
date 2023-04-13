@@ -1,0 +1,24 @@
+{
+    "name": "Eelectron-quick-start",
+    "version": "1.0.0",
+    "description": "A minimal Eelectron application",
+    "main": "electron.js",
+    "scripts": {
+        "start": "electron ."
+    },
+    "repository": "https://github.com/electron/electron-quick-start",
+    "keywords": [
+        "Electron",
+        "quick",
+        "start",
+        "tutorial",
+        "demo"
+    ],
+    "author": "GitHub",
+    "license": "CC0-1.0",
+    "dependencies": {
+        "electron": "^23.1.4",
+        "hls.js": "^1.3.5",
+        "request": "^2.88.2"
+    }
+}

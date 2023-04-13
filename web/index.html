@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="jquery-ui.min.css">
+
+    <title>Eel Example</title>
+    <style>
+        :root {
+            --video-container-width: 100%;
+            --video-container-height: 72%;
+            --video-container-background: black;
+
+            --gift-container-width: 100%;
+            --gift-container-height: 25%;
+            --gift-container-background: black;
+
+            --chatbox-container-height: 96.4%;
+            --chatbox-container-width: 20%;
+            --chatbox-container-background-color: black;
+            --chatbox-container-border-left: 5px solid rgba(26, 26, 26, 255);
+            --chatbox-container-border-right: 10px solid rgba(26, 26, 26, 255);
+
+            --nomessage-letter-spacing: 1px;
+            --nomessage-color: white;
+            --nomessage-font-size: 35px;
+            --nomessage-position: absolute;
+            --nomessage-top: 15px;
+
+            --score-color: white;
+            --score-font-size: 40px;
+            --score-letter-spacing: 1px;
+            --score-position: absolute;
+            --score-bottom: 15px;
+            --score-left: 20px;
+
+            --chat-container-width: 80%;
+            --chat-container-height: 100%;
+
+            --body-background-color: rgba(26, 26, 26, 255);
+
+            --chat-picture-width: 40px;
+            --chat-picture-height: 40px;
+            --chat-picture-margin-right: 10px;
+
+            --chat-name-letter-spacing: 1px;
+            --chat-name-font-size: 35px;
+
+            --chat-message-color: white;
+            --chat-message-letter-spacing: 1px;
+            --chat-message-font-size: 35px;
+
+            --gift-table-max-width: 300px;
+            --gift-table-width: max-content;
+            --gift-table-color: white;
+            --gift-table-font-size: 40px;
+            --gift-table-padding: 15px 20px;
+            --gift-table-background: rgba(116, 172, 255, 0.8);
+            --gift-table-backdrop-filter: blur(15px);
+            --gift-table-border-radius: 10px;
+            --gift-table-letter-spacing: 1px;
+
+            --gift-point-color: white;
+            --gift-point-font-size: 80px;
+            --gift-point-letter-spacing: 3px;
+            --gift-point-font-weight: 600;
+
+            --gift-vgem-margin-left: 6px;
+            --gift-vgem-height: 75px;
+            --gift-vgem-width: 75px;
+
+            --gift-name-color: white;
+            --gift-name-font-size: 70px;
+            --gift-name-letter-spacing: 1.5px;
+            --gift-name-text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+            --gift-name-font-weight: 500;
+            --gift-name-max-width: calc(100% - 300px);
+            --gift-name-width: max-content;
+            --gift-name-padding-right: 40px;
+
+            --gift-picture-width: 170px;
+            --gift-picture-height: 170px;
+            --gift-picture-border-radius: 50%;
+            --gift-picture-border: 6px solid #74ABFF;
+            --gift-picture-margin-right: 50px;
+
+            --gift-add-container-transform: scale(1);
+            --gift-add-container-animation: fadeIn 1s, running-border 2s linear infinite;
+            --gift-add-container-border: 3px solid rgba(116, 172, 255, 0.8);
+            --gift-add-container-background: rgba(0, 0, 0, 0.8);
+            --gift-add-container-backdrop-filter: blur(15px);
+            --gift-add-container-scale: 1;
+
+            --gift-cover-backdrop-filter: blur(0.5px);
+            --gift-cover-background-color: rgba(255, 255, 255, 0.05);
+
+            --one-message-container-margin-bottom: 28px;
+
+            --running-border-0: #FF56A4;
+            --running-border-1: #02FCF0;
+            --running-border-2: #FF9900;
+            --running-border-3: #FF56A4;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes running-border {
+            0% {
+                border-color: var(--running-border-0);
+                border-radius: 15px;
+            }
+
+            33% {
+                border-color: var(--running-border-1);
+                border-radius: 15px;
+            }
+
+            66% {
+                border-color: var(--running-border-2);
+                border-radius: 15px;
+            }
+
+            100% {
+                border-color: var(--running-border-3);
+                border-radius: 15px;
+            }
+        }
+
+        .hello:hover {
+            background-color: black;
+            transition: 0.5 ease all;
+            opacity: 1;
+        }
+
+
+        .hello {
+            background-color: black;
+            opacity: 0;
+            transition: 0.5 ease all;
+        }
+
+        body {
+            background-color: var(--body-background-color);
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #chat-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        #chat-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .chat-container-yes {
+            width: var(--chat-container-width);
+            height: var(--chat-container-height);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .chat-container-no {
+            width: 100%;
+            height: 100%;
+        }
+
+
+        .video-container-yes {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: var(--video-container-width);
+            height: var(--video-container-height);
+            background-color: var(--video-container-background);
+        }
+
+        .video-container-no {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+        }
+
+
+
+        .gift-container-no {
+            display: none;
+        }
+
+
+        .gift-container-yes {
+            height: var(--gift-container-height);
+            width: var(--gift-container-width);
+            background-color: var(--gift-container-background);
+            position: relative;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        #chatbox-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        #chatbox-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+
+        .chatbox-container-yes {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            padding: 10px 15px;
+            height: var(--chatbox-container-height);
+            width: var(--chatbox-container-width);
+            background-color: var(--chatbox-container-background-color);
+            border-left: var(--chatbox-container-border-left);
+            border-right: var(--chatbox-container-border-right);
+            overflow: auto;
+            position: relative;
+            margin-bottom: 20px;
+            border-radius: 15px;
+        }
+
+        .chatbox-container-no {
+            display: none;
+        }
+
+        #nomessage {
+            letter-spacing: var(--nomessage-letter-spacing);
+            color: var(--nomessage-color);
+            font-size: var(--nomessage-font-size);
+            position: var(--nomessage-position);
+            top: var(--nomessage-top);
+            display: inline-block;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-all;
+        }
+
+        #score {
+            color: var(--score-color);
+            font-size: var(--score-font-size);
+            letter-spacing: var(--score-letter-spacing);
+            position: var(--score-position);
+            bottom: var(--score-bottom);
+            left: var(--score-left);
+        }
+
+        .chat-picture {
+            width: var(--chat-picture-width);
+            height: var(--chat-picture-height);
+            margin-right: var(--chat-picture-margin-right);
+        }
+
+        .chat-name {
+            letter-spacing: var(--chat-name-letter-spacing);
+            font-size: var(--chat-name-font-size);
+        }
+
+        .chat-message {
+            color: var(--chat-message-color);
+            letter-spacing: var(--chat-message-letter-spacing);
+            font-size: var(--chat-message-font-size);
+        }
+
+        .gift-table {
+            max-width: var(--gift-table-max-width);
+            width: var(--gift-table-width);
+            color: var(--gift-table-color);
+            font-size: var(--gift-table-font-size);
+            padding: var(--gift-table-padding);
+            background: var(--gift-table-background);
+            backdrop-filter: var(--gift-table-backdrop-filter);
+            border-radius: var(--gift-table-border-radius);
+            letter-spacing: var(--gift-table-letter-spacing);
+        }
+
+        .gift-point {
+            color: var(--gift-point-color);
+            font-size: var(--gift-point-font-size);
+            letter-spacing: var(--gift-point-letter-spacing);
+            font-weight: var(--gift-point-font-weight);
+        }
+
+        .gift-vgem {
+            margin-left: var(--gift-vgem-margin-left);
+            height: var(--gift-vgem-height);
+            width: var(--gift-vgem-width);
+        }
+
+        .gift-name {
+            color: var(--gift-name-color);
+            font-size: var(--gift-name-font-size);
+            letter-spacing: var(--gift-name-letter-spacing);
+            text-shadow: var(--gift-name-text-shadow);
+            font-weight: var(--gift-name-font-weight);
+            max-width: var(--gift-name-max-width);
+            width: var(--gift-name-width);
+            padding-right: var(--gift-name-padding-right);
+        }
+
+        .gift-picture {
+            width: var(--gift-picture-width);
+            height: var(--gift-picture-height);
+            border-radius: var(--gift-picture-border-radius);
+            border: var(--gift-picture-border);
+            margin-right: var(--gift-picture-margin-right);
+        }
+
+        .gift-add-container {
+            transform: var(--gift-add-container-transform);
+            animation: var(--gift-add-container-animation);
+            border: var(--gift-add-container-border);
+            background: var(--gift-add-container-background);
+            backdrop-filter: var(--gift-add-container-backdrop-filter);
+            scale: var(--gift-add-container-scale);
+
+        }
+
+        .gift-cover {
+            backdrop-filter: var(--gift-cover-backdrop-filter);
+            background-color: var(--gift-cover-background-color);
+        }
+
+        .one-message-container {
+            margin-bottom: var(--one-message-container-margin-bottom);
+        }
+    </style>
+</head>
+
+<body id="wholeBody">
+
+    <div style="display: flex; width: 100%; height: 100%; padding: 5px; ">
+
+        <div id="chat-container" class="chat-container-no">
+
+            <div id="video-container" class="video-container-no" style="border-radius: 15px;">
+                <video id="testvideo" src="D://Downloads2/1234.mp4"
+                    style=" background-color: transparent; object-fit: contain; width: 100%; height: 100%; border-radius: 15px;"
+                    autoplay>
+                </video>
+            </div>
+
+
+
+            <div id="gift-container" class="gift-container-no">
+                <div id="score">
+
+                </div>
+            </div>
+
+
+        </div>
+
+        <div id="chatbox-container" class="chatbox-container-no">
+            <div id="nomessage">
+                No messages yet....
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div class="hello"
+        style="cursor:grab; position:  fixed; top: 0;display: flex;justify-content: center;align-items: center; right: 0; -webkit-app-region: drag; z-index: 99999; backdrop-filter: blur(10px); background-color: rgba(0, 0, 0, 0.405); width: 50px; height: 50px; border-radius: 10px; margin: 20px;">
+        <ion-icon style="color:white" name="move-outline"></ion-icon>
+    </div>
+
+    <div class="hello"
+        style="cursor:grab; position:  fixed; top: 0;display: flex;justify-content: center;align-items: center; left: 0; -webkit-app-region: drag; z-index: 99999; backdrop-filter: blur(10px); background-color: rgba(0, 0, 0, 0.405); width: 50px; height: 50px; border-radius: 10px; margin: 20px;">
+        <ion-icon style="color:white" name="move-outline"></ion-icon>
+    </div>
+
+
+
+    <script src="jquery-3.3.1.min.js"></script>
+    <script src="jquery-ui.min.js"></script>
+    <script src="js.cookie-2.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.js"></script>
+
+    <script src="lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.0/firebase.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.0/firebase-firestore.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.0/firebase-database.js"></script>
+    <script type="text/javascript" src="../eel.js"></script>
+    <script src="./script.js"></script>
+
+
+    <script>
+        function resizeToFitWithin(width1, height1, maxWidth, maxHeight) {
+            const aspectRatio = width1 / height1;
+            let newWidth, newHeight;
+
+            if (aspectRatio > maxWidth / maxHeight) {
+                newWidth = Math.round(maxHeight * aspectRatio);
+                newHeight = maxHeight;
+            } else {
+                newWidth = maxWidth;
+                newHeight = Math.round(maxWidth / aspectRatio);
+            }
+
+            return {
+                width: newWidth,
+                height: newHeight,
+            };
+        }
+
+        const width1 = 500;
+        const height1 = 280;
+        const maxWidth = 1100;
+        const maxHeight = 600;
+
+        const resizedDimensions = resizeToFitWithin(width1, height1, maxWidth, maxHeight);
+
+        console.log(`Resized width: ${resizedDimensions.width}, Resized height: ${resizedDimensions.height}`);
+
+    </script>
+</body>
+
+</html>
